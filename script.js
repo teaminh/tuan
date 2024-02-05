@@ -2,29 +2,36 @@ const ms = {
 	h: 3600000, // hour
 	d: 86400000, // day
 	w: 604800000 // week
-}
+};
 
-const incDate = (date, value) => new Date(date.valueOf() + value); // increase date by value
-const decDate = (date, value) => new Date(date.valueOf() - value); // decrease date by value
-const vnTimezone = (date) => incDate(date, ms.h * 7); // increase date by 7 hours
-const msWeek = (date) => Math.floor(date.valueOf() / ms.w);
+const increaseDate = (date, value) => new Date(date.valueOf() + value); // increase date by value
+const decreaseDate = (date, value) => new Date(date.valueOf() - value); // decrease date by value
+const toVNTimezone = (date) => increaseDate(date, ms.h * 7); // increase date by 7 hours
+const msToWeek = (date) => Math.floor(date.valueOf() / ms.w);
 
 document.addEventListener('DOMContentLoaded', function() {
-	const [now, milestone] = [
+	const [now, startingMilestone] = [
 		new Date(),
 		new Date(2023, 11, 31)
-	].map(date => vnTimezone(date));
-	const doW = now.getDay();
-	const sunday = decDate(now, ms.d * doW);
-	const [lastSun, nextSun] = [
-		decDate(sunday, ms.w),
-		incDate(sunday, ms.w)
-	];
+	].map((date) => toVNTimezone(date));
+	const nowDoW = now.getDay(); // day of week
+	const thisSunday = decreaseDate(now, ms.d * nowDoW);
+	const lastSunday = decreaseDate(thisSunday, ms.w);
+	const nextSunday = increaseDate(thisSunday, ms.w);
+	const arrayOfSunday = [lastSunday, thisSunday, nextSunday];
+
 	function formatDisplayText(date) {
-		const sinceMilestone = date.valueOf() - milestone.valueOf();
-		const oddEven = Boolean(msWeek(sinceMilestone) % 2);
-		const monday = incDate(date, ms.d).toLocaleDateString('vi-VN');
-		return `Thứ hai ${monday} tuần ${oddEven ? 'lẻ' : 'chẵn'}`;
-	}
-	document.getElementById('result').innerText = [lastSun, sunday, nextSun].map(formatDisplayText).join('\n');
-})
+		const sinceStartingMilestone = date.valueOf() - startingMilestone.valueOf();
+		const weekPassed = msToWeek(sinceStartingMilestone);
+		const weekstart = increaseDate(date, ms.d);
+		const weekend = increaseDate(date, ms.w);
+		const [weekstartString, weekendString] = [
+			weekstart,
+			weekend
+		].map((date) => date.toLocaleDateString('vi-VN'));
+		return `Tuần từ ${weekstartString} đến ${weekendString} là tuần ${weekPassed % 2 ? 'lẻ' : 'chẵn'}`;
+	};
+	const content = arrayOfSunday.map((sunday) => formatDisplayText(sunday)).join('\n');
+
+	document.getElementById('result').innerText = content;
+});
