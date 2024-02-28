@@ -14,7 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
 		new Date(),
 		new Date(2023, 11, 31)
 	].map((date) => toVNTimezone(date));
+	const weekDay = ['thứ Hai', 'thứ Ba', 'thứ Tư', 'thứ Năm', 'thứ Sáu', 'thứ Bảy'];
 	const nowDoW = now.getDay(); // day of week
+	const norDoW = nowDoW - 1;
 	const thisSunday = decreaseDate(now, ms.d * nowDoW);
 	const lastSunday = decreaseDate(thisSunday, ms.w);
 	const nextSunday = increaseDate(thisSunday, ms.w);
@@ -31,7 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		].map((date) => date.toLocaleDateString('vi-VN'));
 		return `Tuần từ ${weekstartString} đến ${weekendString} là tuần ${weekPassed % 2 ? 'lẻ' : 'chẵn'}`;
 	};
-	const content = arrayOfSunday.map((sunday) => formatDisplayText(sunday)).join('\n');
+	const content = [`Hôm nay là ${norDoW >= 0 ? weekDay[norDoW] : 'Chủ Nhật'} ${now.toLocaleDateString('vi-VN', { timezone: 'Asia/Jarkata' })}`, ...arrayOfSunday.map((sunday) => formatDisplayText(sunday))].join('\n');
 
 	document.getElementById('result').innerText = content;
 });
