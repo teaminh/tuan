@@ -1,8 +1,8 @@
 div.result {
 	width: 100%;
-	text-align: center;
 }
 p.result {
 	font-size: 110%;
+	line-height: 200%;
 	margin: 5% 2.5%;
 }
