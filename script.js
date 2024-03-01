@@ -6,8 +6,6 @@ const ms = {
 
 const increaseDate = (date, value) => new Date(date.valueOf() + value); // increase date by value
 const decreaseDate = (date, value) => new Date(date.valueOf() - value); // decrease date by value
-const toVNTimezone = (date) => increaseDate(date, ms.h * 7); // increase date by 7 hours
-const msToWeek = (date) => Math.floor(date.valueOf() / ms.w);
 
 document.addEventListener('DOMContentLoaded', function() {
 	const [now, startingMilestone] = [
@@ -15,9 +13,10 @@ document.addEventListener('DOMContentLoaded', function() {
 		new Date(2023, 11, 31, 7)
 	];
 	const fixedNow = new Date(
-		now.getUTCFullYear(),
-		now.getUTCMonth(),
-		now.getUTCDate()
+		now.getFullYear(),
+		now.getMonth(),
+		now.getDate(),
+		7
 	);
 	const weekDay = ['Chủ Nhật', 'thứ Hai', 'thứ Ba', 'thứ Tư', 'thứ Năm', 'thứ Sáu', 'thứ Bảy'];
 	const nowDoW = fixedNow.getDay(); // day of week
@@ -28,7 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
 	function formatDisplayText(date) {
 		const sinceStartingMilestone = date.valueOf() - startingMilestone.valueOf();
-		const weekPassed = msToWeek(sinceStartingMilestone);
+		const weekPassed = Math.floor(sinceStartingMilestone.valueOf() / ms.w);
 		const weekstart = increaseDate(date, ms.d);
 		const weekend = increaseDate(date, ms.w);
 		const [weekstartString, weekendString] = [
