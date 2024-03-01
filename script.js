@@ -12,12 +12,16 @@ const msToWeek = (date) => Math.floor(date.valueOf() / ms.w);
 document.addEventListener('DOMContentLoaded', function() {
 	const [now, startingMilestone] = [
 		new Date(),
-		new Date(2023, 11, 31)
-	].map((date) => toVNTimezone(date));
-	const weekDay = ['thứ Hai', 'thứ Ba', 'thứ Tư', 'thứ Năm', 'thứ Sáu', 'thứ Bảy'];
-	const nowDoW = now.getDay(); // day of week
-	const norDoW = nowDoW - 1;
-	const thisSunday = decreaseDate(now, ms.d * nowDoW);
+		new Date(2023, 11, 31, 7)
+	];
+	const fixedNow = new Date(
+		now.getUTCFullYear(),
+		now.getUTCMonth(),
+		now.getUTCDate()
+	);
+	const weekDay = ['Chủ Nhật', 'thứ Hai', 'thứ Ba', 'thứ Tư', 'thứ Năm', 'thứ Sáu', 'thứ Bảy'];
+	const nowDoW = fixedNow.getDay(); // day of week
+	const thisSunday = decreaseDate(fixedNow, ms.d * nowDoW);
 	const lastSunday = decreaseDate(thisSunday, ms.w);
 	const nextSunday = increaseDate(thisSunday, ms.w);
 	const arrayOfSunday = [lastSunday, thisSunday, nextSunday];
@@ -33,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		].map((date) => date.toLocaleDateString('vi-VN'));
 		return `Tuần từ ${weekstartString} đến ${weekendString} là tuần ${weekPassed % 2 ? 'lẻ' : 'chẵn'}`;
 	};
-	const content = [`Hôm nay là ${norDoW >= 0 ? weekDay[norDoW] : 'Chủ Nhật'} ${now.toLocaleDateString('vi-VN', { timezone: 'Asia/Jarkata' })}`, ...arrayOfSunday.map((sunday) => formatDisplayText(sunday))].join('\n');
+	const content = [`Hôm nay là ${weekDay[nowDoW]} ${fixedNow.toLocaleDateString('vi-VN', { timezone: 'Asia/Jarkata' })}`, ...arrayOfSunday.map((sunday) => formatDisplayText(sunday))].join('\n');
 
 	document.getElementById('result').innerText = content;
 });
