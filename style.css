@@ -1,8 +1,42 @@
+/* default -- begin */
+body {
+	padding: 0px;
+}
+/*---*/
 div.result {
 	width: 100%;
 }
-p.result {
-	font-size: 110%;
-	line-height: 200%;
-	margin: 5% 2.5%;
+/* default -- end */
+
+/* mobile -- begin */
+@media only screen and (max-width: 600px) {
+	p.result {
+		font-size: 110%;
+		line-height: 175%;
+		margin: 5% 2.5%;
+		width: 95%;
+	}
 }
+/* mobile -- end */
+
+/* tablet -- begin */
+@media only screen and (min-width: 600px) {
+	p.result {
+		font-size: 150%;
+		line-height: 200%;
+		margin: 7.5% 5%;
+		width: 90%;
+	}
+}
+/* tablet -- end */
+
+/* desktop -- begin */
+@media only screen and (min-width: 768px) {
+	p.result {
+		font-size: 250%;
+		line-height: 250%;
+		margin: 15% 10%;
+		width: 80%;
+	}
+}
+/* desktop -- end */
